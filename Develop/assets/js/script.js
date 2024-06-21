@@ -12,10 +12,16 @@ function generateTaskId() {
 }
 
 // Todo: create a function to create a task card
+// t means task
 function createTaskCard(task) {
-    let cardBody = document.createElement("div");
-    let cardHeader = documnet.createElement("h5");
-    let cardText= document.createElement("p");
+    const taskCard = $('<div>')
+        .addClass('card task-card draggable my-3')
+        .attr('data-task-id', task.id);
+    const tHeader = $('<div>').addClass('card-header h4').text(task.name);
+    const tBody = $('<div>').addClass('card-body');
+    const tDescription = $('<p>').addClass('card-text').text(task.type);
+    const tSubmissionDate = $('button').addClass('btn btm-danger delete').text('Delete').attr('data-project-id', task.id);
+    tDeleteButton.on('click', handleDeleteTask);
 }
 
 // Todo: create a function to render the task list and make cards draggable
@@ -58,7 +64,7 @@ function handleAddTask(event){
 
 // Todo: create a function to handle deleting a task
 function handleDeleteTask(event){
-
+    let taskID
 }
 
 // Todo: create a function to handle dropping a task into a new status lane
