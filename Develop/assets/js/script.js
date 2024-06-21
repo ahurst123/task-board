@@ -7,6 +7,7 @@ function generateTaskId() {
     const timestamp = new Date().getTime(); //current time
     const randomNum = Math.floor(Math.random() * 100); //creates a random number between 0 and 99
     const uniqueID = timestamp + '-' + randomNum; //combines timestamp and random number to create a unique id
+    nextId = uniqueID;
     return uniqueID;
 }
 
@@ -33,6 +34,26 @@ function renderTaskList() {
 // Todo: create a function to handle adding a new task
 function handleAddTask(event){
     event.preventDefault();
+    let nTask = $("#nTask").val();
+    let submissionDate = $("#submissionDate").val();
+    let description = $("#description").val();
+    if(submissionDate && description && nTask){
+        let newTask = {
+            id: generateTaskId(),
+            name: nTask,
+            date: submissionDate,
+            description: description,
+            status: "todo"
+        };
+        taskList.push(newTask);
+        localStorage.setItem("tasks", JSON.stringify(taskList));
+        localStorage.setItem("nextId", JSON.stringify(nextId));
+        renderTaskList();
+        $("#formModal").modal("hide");
+        $("taskForm")[0].reset();
+    } else {
+        alert("Please Complete the Task Form.")
+    }
 }
 
 // Todo: create a function to handle deleting a task
