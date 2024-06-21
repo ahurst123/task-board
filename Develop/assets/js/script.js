@@ -19,12 +19,14 @@ function createTaskCard(task) {
         .attr('data-task-id', task.id);
     const tHeader = $('<div>').addClass('card-header h4').text(task.name);
     const tBody = $('<div>').addClass('card-body');
-    const tDescription = $('<p>').addClass('card-text').text(task.type);
-    const tDeleteButton = $('button').addClass('btn btn-danger delete').text('Delete').attr('data-project-id', task.id);
+    const tDescription = $('<p>').addClass('card-text').text(task.description);
+    const tDeleteButton = $('<button>').addClass('btn btn-danger delete').text('Delete').attr('data-task-id', task.id);
+    const tDate = $('<p>').addClass('card-text').text('Due Date: ' + task.date);
     tDeleteButton.on('click', handleDeleteTask);
     taskCard.append(tHeader);
     taskCard.append(tBody);
     taskCard.append(tDescription);
+    taskCard.append(tDate);
     taskCard.append(tDeleteButton);
     return taskCard;
 }
@@ -41,9 +43,6 @@ function renderTaskList() {
 // Todo: create a function to handle adding a new task
 function handleAddTask(event){
     event.preventDefault();
-
-    console.log('click');
-
     let nTask = $("#nTask").val();
     let submissionDate = $("#dueDate").val();
     let description = $("#description").val();
@@ -68,16 +67,15 @@ function handleAddTask(event){
 
 // Todo: create a function to handle deleting a task
 function handleDeleteTask(event){
-    console.log('delete');
     let tId = $(this).data("task-id");
-    tList = taskList.filter(task => task.id !== tId);
+    taskList = taskList.filter(task => task.id !== tId);
     localStorage.setItem("tasks", JSON.stringify(taskList));
     renderTaskList();
 }
 
 // Todo: create a function to handle dropping a task into a new status lane
 function handleDrop(event, ui) {
-    let taskID = ui.draggable.attr("id").split("-")[1];
+    let taskID = ui.draggable.attr("data-task-id");
     let newStatus = $(this).attr("id");
     let taskIndex = taskList.findIndex(task => task.id == taskID);
     taskList[taskIndex].status = newStatus;
@@ -89,10 +87,16 @@ function handleDrop(event, ui) {
 $(document).ready(function () {
     renderTaskList();
     $("#submit-button").click(handleAddTask);
-    //$(document).on("click", ".delete-btn", handleDeleteTask);
+    
+    $(".task-card").draggable({
+        revert: "invalid",
+        cursor: "move"
+    });
+
     $(".lane").droppable({
         accept: ".task-card",
         drop: handleDrop
     });
+
     $("#dueDate").datepicker();
 });
