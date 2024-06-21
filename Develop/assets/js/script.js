@@ -15,8 +15,12 @@ function generateTaskId() {
 // t means task
 function createTaskCard(task) {
     const taskCard = $('<div>')
-        .addClass('card task-card draggable my-3')
-        .attr('data-task-id', task.id);
+        .addClass('card task-card my-3') // Remove 'draggable' class here
+        .attr('data-task-id', task.id)
+        .draggable({ // Attach draggable functionality here
+            revert: "invalid",
+            cursor: "move"
+        });
     const tHeader = $('<div>').addClass('card-header h4').text(task.name);
     const tBody = $('<div>').addClass('card-body');
     const tDescription = $('<p>').addClass('card-text').text(task.description);
@@ -80,6 +84,13 @@ function handleDrop(event, ui) {
     let taskIndex = taskList.findIndex(task => task.id == taskID);
     taskList[taskIndex].status = newStatus;
     localStorage.setItem("tasks", JSON.stringify(taskList));
+    
+    // Reapply draggable functionality and refresh position
+    ui.draggable.draggable({
+        revert: "invalid",
+        cursor: "move"
+    }).draggable("refreshPositions");
+
     renderTaskList();
 }
 
@@ -87,11 +98,6 @@ function handleDrop(event, ui) {
 $(document).ready(function () {
     renderTaskList();
     $("#submit-button").click(handleAddTask);
-    
-    $(".task-card").draggable({
-        revert: "invalid",
-        cursor: "move"
-    });
 
     $(".lane").droppable({
         accept: ".task-card",

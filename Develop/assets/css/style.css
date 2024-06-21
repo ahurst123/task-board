@@ -13,5 +13,7 @@ body {
 
 .task-card:hover {
   cursor: grab;
-  cursor: grabbing;
+}
+.task-card.ui-draggable-dragging {
+  z-index: 1000; /* Set a high z-index value to bring the dragged task card to the front */
 }
