@@ -19,12 +19,20 @@ function createTaskCard(task) {
 
 // Todo: create a function to render the task list and make cards draggable
 function renderTaskList() {
-    let 
+    const localStorageData=JSON.parse(localStorage.getItem('tasks'));
+    for (const task of localStorageData) {
+        if(task.status==='To-Do'){
+            let toDoDiv=$('div');
+            toDoDiv.html(task.title)
+            console.log(toDoDiv)
+            $('#todo-cards').append(toDoDiv)
+        }
+    }
 }
 
 // Todo: create a function to handle adding a new task
 function handleAddTask(event){
-
+    event.preventDefault();
 }
 
 // Todo: create a function to handle deleting a task
